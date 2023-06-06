@@ -6,6 +6,7 @@ const dotenv = require("dotenv").config();
 const colors = require("colors");
 const cors = require("cors");
 const errorHandler = require("./middlewares/errorHandler");
+const adminModal = require("./models/AdminModel");
 
 const multer = require("multer");
 const fileupload = require("express-fileupload");
