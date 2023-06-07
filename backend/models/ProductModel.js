@@ -1,34 +1,38 @@
 const { Int32 } = require('bson')
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema({
-    user_name: {
+const productSchema = mongoose.Schema({
+    product_name: {
         type: String,
         required: [true, 'Please enter your first name']
     },
-    phone: {
+    product_description: {
         type: String,
         required: [true, 'Please enter your phone']
     },
-    email: {
+    product_price: {
         type: String,
         required: [true, 'Please enter your email']
     },
-    password: {
+    stock_number: {
         type: String,
         required: [true, 'Please enter your password']
     },
-    image: {
-        data:Buffer,
-        ContentType: String
-    },
-    AccountStatus: {
-        type: Boolean,
-        default: true
+    images: [
+        {
+            data: Buffer,
+            contentType: String
+        }
+    ],
+    CategoryID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Category',
     }
 },
-{   collection: 'Users',
+{   
+    collection: 'Products',
     timestamp: true
 }) 
 
-module.exports = mongoose.model('Users', userSchema)
+module.exports = mongoose.model('Products', productSchema)

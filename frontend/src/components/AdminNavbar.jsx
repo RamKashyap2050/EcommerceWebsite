@@ -1,14 +1,31 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  FaUser,
+  FaList,
+  FaClipboardList,
+  FaPlus,
+  FaSignOutAlt,
+  FaUsers,
+} from "react-icons/fa";
+import Logo from "../Logo.jpg";
+import "../styles/AdminNavbar.css";
+
 const AdminNavbar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("AdminData");
     navigate("/loginadmin");
   };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-smoky-white">
-      <a className="navbar-brand" href="/">
+      <a
+        className="navbar-brand"
+        href="/admindashboard"
+        style={{ fontWeight: "bolder" }}
+      >
+        <img src={Logo} alt="Logo" className="mr-2 brand-logo-navbar" />
         EasyShop
       </a>
       <button
@@ -34,33 +51,36 @@ const AdminNavbar = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Settings
+              <FaUser className="mr-1" /> Settings
             </a>
             <div
               className="dropdown-menu"
               aria-labelledby="admin-settings-dropdown"
             >
               <a className="dropdown-item" href="/adminprofile">
-                Profile
+                <FaUser className="mr-1" /> Profile
+              </a>
+              <a className="dropdown-item" href="/adminaddcategory">
+                <FaPlus className="mr-1" /> Add a Category
               </a>
               <a className="dropdown-item" href="/adminprofile">
-                Add a Category
+                <FaClipboardList className="mr-1" /> Manage Orders
+              </a>
+              <a className="dropdown-item" href="/adminaddproduct">
+                <FaPlus className="mr-1" /> Add a New Product
               </a>
               <a className="dropdown-item" href="/adminprofile">
-                View Orders
-              </a>
-              <a className="dropdown-item" href="/adminprofile">
-                Add a New Product
+                <FaUsers className="mr-1" /> Manage Users
               </a>
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" onClick={handleLogout}>
-                Logout
+                <FaSignOutAlt className="mr-1" /> Logout
               </a>
             </div>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="/adminDashboard">
-              Dashboard
+              <FaList className="mr-1" /> Dashboard
             </a>
           </li>
         </ul>

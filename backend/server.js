@@ -7,7 +7,8 @@ const colors = require("colors");
 const cors = require("cors");
 const errorHandler = require("./middlewares/errorHandler");
 const adminModal = require("./models/AdminModel");
-
+const productModel = require("./models/ProductModel");
+const categoryModel = require("./models/CategoryModel")
 const multer = require("multer");
 const fileupload = require("express-fileupload");
 const bodyParser = require("body-parser");
