@@ -5,11 +5,11 @@ const categorySchema = mongoose.Schema(
   {
     category_name: {
       type: String,
-      required: [true, "Please enter your first name"],
+      required: [true, "Please enter your Category Name"],
     },
     category_description: {
       type: String,
-      required: [true, "Please enter your phone"],
+      required: [true, "Please enter your Desc"],
     },
   },
   { collection: "Category", timestamp: true }

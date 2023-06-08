@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
+import axios from "axios";
 import { TextField, Button, makeStyles } from "@material-ui/core";
 import AdminNavbar from "../components/AdminNavbar";
-
+import { useNavigate } from "react-router-dom";
+import  Alert  from "react-bootstrap/Alert";
 const useStyles = makeStyles((theme) => ({
   formContainer: {
     display: "flex",
@@ -23,18 +25,46 @@ const AddCategory = () => {
   const classes = useStyles();
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
+  const [show, setShow] = useState(false)
+  const [alertresponse, setAlertresponse] = useState("");
+  const AdminData = localStorage.getItem("AdminData")
+  console.log(AdminData)
+  const navigate = useNavigate()
+  useEffect(() => {
+      if (!AdminData) {
+        navigate('/loginadmin');
+      }
+    }, [AdminData, navigate]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Perform category submission logic here
-    // For example, send the category data to an API or update state
-    console.log("Category Name:", categoryName);
-    console.log("Category Description:", categoryDescription);
-  };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+    
+      const categoryData = {
+        category_name: categoryName,
+        category_description: categoryDescription,
+      };
+    
+      axios.post('http://localhost:3030/Admin/newcategory', categoryData)
+        .then((response) => {
+          console.log('Category submission successful!');
+          console.log('Response:', response.data);
+          setShow(true)
+          setAlertresponse("Posted Succesfully")
+          setCategoryDescription("")
+          setCategoryName("")
+        })
+        .catch((error) => {
+          console.error('Category submission failed.');
+          console.error('Error:', error);
+          setShow(true)
+          setAlertresponse("Error in posting Data")
+        });
+    };
 
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar /><br/><br/>
+      {show && <Alert variant="success" className="w-50 mx-auto">{alertresponse}</Alert>}
       <h3
         style={{ marginTop: "2rem", textAlign: "center", marginBottom: "4rem" }}
       >
