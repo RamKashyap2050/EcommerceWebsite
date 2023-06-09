@@ -7,6 +7,7 @@ import {
   FaPlus,
   FaSignOutAlt,
   FaUsers,
+  FaCog
 } from "react-icons/fa";
 import Logo from "../Logo.jpg";
 import "../styles/AdminNavbar.css";
@@ -51,7 +52,7 @@ const AdminNavbar = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <FaUser className="mr-1" /> Settings
+              <FaCog className="mr-1" /> Options
             </a>
             <div
               className="dropdown-menu"
