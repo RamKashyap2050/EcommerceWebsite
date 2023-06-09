@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../components/AdminNavbar";
 import Logo from "../Logo.jpg";
 import "../styles/AdminProfile.css";
+import Footer from "../components/Footer";
 const AdminProfile = () => {
   const adminDataString = localStorage.getItem("AdminData");
   const adminData = adminDataString ? JSON.parse(adminDataString) : null;
@@ -47,6 +48,7 @@ const AdminProfile = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

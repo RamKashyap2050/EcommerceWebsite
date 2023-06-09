@@ -4,6 +4,7 @@ import { TextField, Button, makeStyles } from "@material-ui/core";
 import AdminNavbar from "../components/AdminNavbar";
 import { useNavigate } from "react-router-dom";
 import  Alert  from "react-bootstrap/Alert";
+import Footer from "../components/Footer";
 const useStyles = makeStyles((theme) => ({
   formContainer: {
     display: "flex",
@@ -100,6 +101,7 @@ const AddCategory = () => {
           Add Category
         </Button>
       </form>
+      <Footer/>
     </div>
   );
 };

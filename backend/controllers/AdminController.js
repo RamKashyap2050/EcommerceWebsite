@@ -104,9 +104,15 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(newProduct);
 });
 
+const getProducts = asyncHandler(async(req,res) => {
+    const getProducts = await Product.find({})
+
+    res.status(200).json(getProducts)
+})
+
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
-module.exports = { loginAdmin, createCategory, getCategory, createProduct };
+module.exports = { loginAdmin, createCategory, getCategory, createProduct, getProducts };

@@ -66,7 +66,7 @@ const AdminNavbar = () => {
               <a className="dropdown-item" href="/adminaddproduct">
                 <FaPlus className="mr-1" /> Add a New Product
               </a>
-              <a className="dropdown-item" href="/adminprofile">
+              <a className="dropdown-item" href="/adminmanageinventory">
                 <FaUsers className="mr-1" /> Manage Inventory
               </a>
               <a className="dropdown-item" href="/adminprofile">

@@ -12,6 +12,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import AdminNavbar from "../components/AdminNavbar";
+import Footer from "../components/Footer";
 
 const AddProduct = () => {
   const AdminData = localStorage.getItem("AdminData");
@@ -198,6 +199,7 @@ const AddProduct = () => {
           </Button>
         </form>
       </Container>
+      <Footer />
     </>
   );
 };

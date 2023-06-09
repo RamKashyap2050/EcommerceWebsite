@@ -5,6 +5,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminProfile from "./pages/AdminProfile";
 import AddCategory from "./pages/AddCategory";
 import AddProduct from "./pages/AddProduct";
+import ManageInventory from "./pages/ManageInventory";
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/adminprofile" element={<AdminProfile />} />
         <Route path='/adminaddcategory' element={<AddCategory />} />
         <Route path='/adminaddproduct' element={<AddProduct />} />
+        <Route path='/adminmanageinventory' element={<ManageInventory />} />
       </Routes>
     </BrowserRouter>
   );
