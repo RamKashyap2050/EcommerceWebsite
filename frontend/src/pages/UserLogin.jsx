@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginAdmin = () => {
+const LoginUser = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,15 +32,15 @@ const LoginAdmin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3030/Admin/login", {
+      const response = await axios.post("http://localhost:3030/Users/login", {
         email,
         password,
       });
       setShow(false);
 
       console.log(response.data);
-      localStorage.setItem("AdminData", JSON.stringify(response.data));
-      navigate("/adminprofile");
+      localStorage.setItem("UserData", JSON.stringify(response.data));
+      navigate("/userprofile");
     } catch (error) {
       console.error(error);
       setEmail("");
@@ -73,7 +73,7 @@ const LoginAdmin = () => {
                 </Alert>
               )}
               <Typography component="h1" variant="h5">
-                Admin Login
+                Login
               </Typography>
               <form className={classes.form} onSubmit={handleSubmit}>
                 <TextField
@@ -112,6 +112,7 @@ const LoginAdmin = () => {
                   Login
                 </Button>
               </form>
+              <a href="/signup" className="pb-2">Don't Have an Account?</a>
             </div>
           </Container>
         </div>
@@ -120,4 +121,4 @@ const LoginAdmin = () => {
   );
 };
 
-export default LoginAdmin;
+export default LoginUser;
