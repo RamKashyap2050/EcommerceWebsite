@@ -69,7 +69,7 @@ const LoginUser = () => {
             <div className={classes.container}>
               {show && (
                 <Alert severity="error" className="mb-4">
-                  Incorrect Admin Credentials
+                  Incorrect Credentials
                 </Alert>
               )}
               <Typography component="h1" variant="h5">

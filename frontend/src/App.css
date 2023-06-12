@@ -6,3 +6,15 @@
   width: 400px;
   height: 100%;
 }
+.userprofilephoto:hover{
+  transform: scale(1.2);
+}
+.userprofilephoto {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+}

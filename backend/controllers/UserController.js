@@ -7,7 +7,7 @@ const nodemailer = require("nodemailer");
 //Function that enables us to Signup
 const registerUser = asyncHandler(async (req, res) => {
   const { user_name, phone, email, password } = req.body;
-//   const image = req.files.image;
+  //   const image = req.files.image;
   if (!user_name || !phone || !email || !password) {
     res.status(400);
     throw new Error("Please enter all the fields!");
@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
     user_name,
     phone,
     email,
-    password: hashedPassword
+    password: hashedPassword,
     // image: image,
   });
 
@@ -106,11 +106,38 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
+const updateClientProfilePhoto = asyncHandler(async (req, res) => {
+  const profilePhotoPath = req.files.profilePhoto; 
+  const userID = req.params.userID; 
+console.log(userID, profilePhotoPath)
+  if (!profilePhotoPath) {
+    return res.status(400).json({ error: "Profile photo is required." });
+  }
+
+  try {
+    const user = await Users.findById(userID);
+    console.log(user)
+    // if (!user) {
+    //   return res.status(404).json({ error: "User not found." });
+    // }
+
+    user.image = profilePhotoPath;
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      ...updatedUser._doc,
+      token: await generateToken(updatedUser._id),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
 
-
-module.exports = {loginUser, registerUser}
+module.exports = { loginUser, registerUser, updateClientProfilePhoto };

@@ -81,7 +81,7 @@ const ManageInventory = () => {
                     Stock Number: {product.stock_number}
                   </Typography>
                   <Typography variant="body2" component="p">
-                    Price: {product.product_price}
+                    Price: {product.product_price}$
                   </Typography>
                 </CardContent>
                 <div className="carousel-container" key={product.id}>
