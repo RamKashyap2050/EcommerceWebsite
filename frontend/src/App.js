@@ -9,6 +9,8 @@ import ManageInventory from "./pages/ManageInventory";
 import SignupPage from "./pages/UserSignup";
 import LoginUser from "./pages/UserLogin";
 import UserProfile from "./pages/UserProfile";
+import UserHomePage from "./pages/UserHomePage";
+import ManageUsers from "./pages/ManageUsers";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +24,8 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginUser />} />
         <Route path="/userprofile" element={<UserProfile />} />
+        <Route path="/" element={<UserHomePage />} />
+        <Route path='/getusersforadmin' element={<ManageUsers />} />
       </Routes>
     </BrowserRouter>
   );

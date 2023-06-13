@@ -7,7 +7,8 @@ import {
   FaPlus,
   FaSignOutAlt,
   FaUsers,
-  FaCog
+  FaCog,
+  FaMailBulk,
 } from "react-icons/fa";
 import Logo from "../Logo.jpg";
 import "../styles/AdminNavbar.css";
@@ -70,8 +71,11 @@ const AdminNavbar = () => {
               <a className="dropdown-item" href="/adminmanageinventory">
                 <FaUsers className="mr-1" /> Manage Inventory
               </a>
-              <a className="dropdown-item" href="/adminprofile">
+              <a className="dropdown-item" href="/getusersforadmin">
                 <FaUsers className="mr-1" /> Manage Users
+              </a>
+              <a className="dropdown-item" href="/promotionemail">
+                <FaMailBulk className="mr-1" /> Promotion Email
               </a>
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" onClick={handleLogout}>

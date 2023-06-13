@@ -6,6 +6,8 @@ import {
   FaSignOutAlt,
   FaHeart,
   FaFileAlt,
+  FaShoppingCart,
+  FaSignInAlt,
 } from "react-icons/fa";
 import Logo from "../Logo.jpg";
 import "../styles/AdminNavbar.css";
@@ -16,7 +18,6 @@ const UserHeader = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("UserData");
-    navigate("/login");
   };
 
   return (
@@ -40,8 +41,12 @@ const UserHeader = () => {
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
             <a className="nav-link" href="/userprofile">
-              <FaUser className="mr-1" />{" "}
-              {userData ? userData.user_name : "Guest"}
+              {userData ? (
+                <>
+                  <FaUser className="mr-1" />
+                  {userData.user_name}
+                </>
+              ) : null}
             </a>
           </li>
 
@@ -52,8 +57,19 @@ const UserHeader = () => {
           </li>
           <li className="nav-item">
             <a className="nav-link" href="/userorders">
-              <FaFileAlt className="mr-1" /> Orders
+              <FaShoppingCart className="mr-1" /> Cart
             </a>
+          </li>
+          <li className="nav-item">
+            {userData ? (
+              <a className="nav-link" onClick={handleLogout}>
+                <FaSignOutAlt className="mr-1" /> Logout
+              </a>
+            ) : (
+              <a className="nav-link" href="/login">
+                <FaSignInAlt className="mr-1" /> Login
+              </a>
+            )}
           </li>
         </ul>
       </div>

@@ -9,6 +9,7 @@ const errorHandler = require("./middlewares/errorHandler");
 const adminModal = require("./models/AdminModel");
 const productModel = require("./models/ProductModel");
 const categoryModel = require("./models/CategoryModel")
+const Wishlist = require("./models/WishlistModel")
 const multer = require("multer");
 const fileupload = require("express-fileupload");
 const bodyParser = require("body-parser");

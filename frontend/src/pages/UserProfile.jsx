@@ -17,11 +17,11 @@ import {
   ExitToApp,
 } from "@mui/icons-material";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import NotFoundPage from "../components/404";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("UserData"));
-  console.log(userData._id);
   function handleLogout() {
     localStorage.removeItem("UserData");
     navigate("/login");
@@ -68,7 +68,7 @@ const UserProfile = () => {
   return (
     <>
       <UserHeader />
-      <div
+        { userData ? ( <div
         style={{
           display: "flex",
           flexDirection: "column",
@@ -76,7 +76,7 @@ const UserProfile = () => {
           marginTop: "2rem",
         }}
       >
-        <Card style={{ width: "300px", marginBottom: "1rem" }}>
+        <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
           <CardContent style={{ display: "flex", justifyContent: "center" }}>
             <img
               src={convertImageBufferToBase64(userData.image.data)}
@@ -105,7 +105,7 @@ const UserProfile = () => {
             <Typography color="textSecondary">{userData.user_name}</Typography>
           </CardContent>
         </Card>
-        <Card style={{ width: "300px", marginBottom: "1rem" }}>
+        <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
           <CardContent>
             <div style={{ display: "flex" }}>
               <Typography>Email: &nbsp; &nbsp;</Typography>
@@ -117,7 +117,7 @@ const UserProfile = () => {
             </div>
           </CardContent>
         </Card>
-        <Card style={{ width: "300px", marginBottom: "1rem" }}>
+        <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
           <CardContent style={{ margin: "auto", textAlign: "center" }}>
             <div>
               <Button
@@ -164,7 +164,7 @@ const UserProfile = () => {
             </div>
           </CardContent>
         </Card>
-        <Card style={{ width: "300px", marginBottom: "1rem" }}>
+        <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
           <CardContent
             style={{ display: "flex", justifyContent: "space-around" }}
           >
@@ -187,7 +187,7 @@ const UserProfile = () => {
             </Button>
           </CardContent>
         </Card>
-      </div>
+      </div>): (<NotFoundPage />)}
       <Footer />
     </>
   );

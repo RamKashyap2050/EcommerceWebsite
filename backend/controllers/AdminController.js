@@ -110,9 +110,15 @@ const getProducts = asyncHandler(async(req,res) => {
     res.status(200).json(getProducts)
 })
 
+const getUsersforAdmin  = asyncHandler(async(req,res) => {
+    const getUsersforAdmin = await Users.find({})
+
+    res.status(200).json(getUsersforAdmin)
+})
+
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
-module.exports = { loginAdmin, createCategory, getCategory, createProduct, getProducts };
+module.exports = { loginAdmin, createCategory, getCategory, createProduct, getProducts, getUsersforAdmin };
