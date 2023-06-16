@@ -11,6 +11,9 @@ import LoginUser from "./pages/UserLogin";
 import UserProfile from "./pages/UserProfile";
 import UserHomePage from "./pages/UserHomePage";
 import ManageUsers from "./pages/ManageUsers";
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import PromotionEmail from "./pages/PromotionEmail";
 function App() {
   return (
     <BrowserRouter>
@@ -26,7 +29,10 @@ function App() {
         <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/" element={<UserHomePage />} />
         <Route path='/getusersforadmin' element={<ManageUsers />} />
-      </Routes>
+        <Route path='/userwishlist' element={<Wishlist />} />
+        <Route path='/usercart' element={<Cart />} />
+        <Route path='/promotionemail' element={<PromotionEmail />} />
+      </Routes> 
     </BrowserRouter>
   );
 }

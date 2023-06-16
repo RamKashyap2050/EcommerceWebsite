@@ -18,6 +18,7 @@ const UserHeader = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("UserData");
+    navigate("/")
   };
 
   return (
@@ -56,7 +57,7 @@ const UserHeader = () => {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/userorders">
+            <a className="nav-link" href="/usercart">
               <FaShoppingCart className="mr-1" /> Cart
             </a>
           </li>

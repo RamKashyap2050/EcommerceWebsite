@@ -23,6 +23,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const UserHomePage = () => {
   const [data, setData] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem("UserData"))
+  const navigate = useNavigate()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,11 +51,32 @@ const UserHomePage = () => {
     return `data:image/jpeg;base64,${base64String}`;
   };
 
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const handleClick = () => {
-    setIsFavorite(!isFavorite);
+  const handleClick = (postId) => {
+    setIsFavorite((prevState) => ({
+      ...prevState,
+      [postId]: true,
+    }));
   };
+
+  const AddToCart = (product) => {
+    const url = 'http://localhost:3030/Users/addtocart';
+    
+    const payload = {
+      user: user._id,
+      product: product
+    };
+    console.log(payload)
+    axios.post(url, payload)
+      .then(response => {
+        console.log(response.data);
+        navigate('/usercart')
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+  
+
   return (
     <div>
       <div>
@@ -141,6 +167,7 @@ const UserHomePage = () => {
                         variant="contained"
                         color="primary"
                         style={{ width: "80%" }}
+                        onClick={() => AddToCart(product._id)}
                       >
                         Add to Cart
                       </Button>
@@ -149,9 +176,7 @@ const UserHomePage = () => {
                       variant="outlined"
                       color=""
                       style={{ width: "20%" }}
-                      onClick={() => {
-                        handleClick(product._id);
-                      }}
+                      onClick={() => handleClick(product._id)}
                     >
                       {isFavorite ? (
                         <FavoriteIcon style={{ color: "red" }} />

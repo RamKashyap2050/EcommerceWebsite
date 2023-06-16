@@ -174,7 +174,7 @@ const UserProfile = () => {
               color="info"
               style={{ borderRadius: 20, marginBottom: "1rem" }}
             >
-              Account
+              Edit
             </Button>
             <Button
               startIcon={<ExitToApp />}
