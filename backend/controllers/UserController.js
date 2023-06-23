@@ -90,6 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
           phone: user.phone,
           email: user.email,
           image: user.image,
+          saved_address: user.saved_address,
           token: await generateToken(user.id),
         });
       } else {
@@ -109,20 +110,41 @@ const loginUser = asyncHandler(async (req, res) => {
 const updateClientProfilePhoto = asyncHandler(async (req, res) => {
   const profilePhotoPath = req.files.profilePhoto; 
   const userID = req.params.userID; 
-console.log(userID, profilePhotoPath)
   if (!profilePhotoPath) {
     return res.status(400).json({ error: "Profile photo is required." });
   }
 
   try {
     const user = await Users.findById(userID);
-    console.log(user)
-    // if (!user) {
-    //   return res.status(404).json({ error: "User not found." });
-    // }
 
     user.image = profilePhotoPath;
     const updatedUser = await user.save();
+    console.log(updatedUser)
+    res.status(200).json({
+      ...updatedUser._doc,
+      token: await generateToken(updatedUser._id),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+const updateClientAddress = asyncHandler(async (req, res) => {
+  const address = req.body; // Access the address data directly from req.body
+  const userID = req.params.userID;
+
+  if (!address) {
+    return res.status(400).json({ error: "Address is required." });
+  }
+
+  try {
+    const user = await Users.findById(userID);
+
+    user.saved_address.push(address);
+
+    const updatedUser = await user.save();
+    console.log(updatedUser);
 
     res.status(200).json({
       ...updatedUser._doc,
@@ -141,4 +163,4 @@ const generateToken = async (id) => {
   });
 };
 
-module.exports = { loginUser, registerUser, updateClientProfilePhoto };
+module.exports = { loginUser, registerUser, updateClientProfilePhoto, updateClientAddress };

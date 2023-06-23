@@ -7,18 +7,22 @@ const ordersSchema = mongoose.Schema(
       required: true,
       ref: "Users",
     },
-    product: {
+    products: [{
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Products",
-    },
+    }],
     totalAmount: {
       type: String,
       required: true,
     },
     ShippingAddress: {
-        type: String,
-        required: true
+      type: String,
+      required: true
+    },
+    isCancelled:{
+      type: Boolean,
+      default: false
     }
   },
   {

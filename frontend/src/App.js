@@ -14,6 +14,8 @@ import ManageUsers from "./pages/ManageUsers";
 import Wishlist from "./pages/Wishlist";
 import Cart from "./pages/Cart";
 import PromotionEmail from "./pages/PromotionEmail";
+import Checkout from "./pages/Checkout";
+import EditProfile from "./pages/EditProfile";
 function App() {
   return (
     <BrowserRouter>
@@ -32,6 +34,8 @@ function App() {
         <Route path='/userwishlist' element={<Wishlist />} />
         <Route path='/usercart' element={<Cart />} />
         <Route path='/promotionemail' element={<PromotionEmail />} />
+        <Route path='/usercheckout' element={<Checkout />} />
+        <Route path='/editprofile' element={<EditProfile />} />
       </Routes> 
     </BrowserRouter>
   );

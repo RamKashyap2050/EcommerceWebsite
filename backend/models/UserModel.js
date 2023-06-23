@@ -22,8 +22,8 @@ const userSchema = mongoose.Schema({
         data:Buffer,
         ContentType: String
     },
-    shipping_address:{
-        type: String
+    saved_address:{
+        type: Array
     },
     AccountStatus: {
         type: Boolean,
