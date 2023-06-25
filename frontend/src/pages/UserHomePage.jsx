@@ -25,8 +25,8 @@ const UserHomePage = () => {
   const [data, setData] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("UserData"))
-  const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem("UserData"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,31 +51,46 @@ const UserHomePage = () => {
     return `data:image/jpeg;base64,${base64String}`;
   };
 
-  const handleClick = (postId) => {
-    setIsFavorite((prevState) => ({
-      ...prevState,
-      [postId]: true,
-    }));
-  };
+  // ...
 
-  const AddToCart = (product) => {
-    const url = 'http://localhost:3030/Users/addtocart';
-    
+  const handleClick = (productId) => {
+    setIsFavorite(true);
+
+    const url = `http://localhost:3030/Users/addtowishlist`;
+
     const payload = {
       user: user._id,
-      product: product
+      product: productId,
     };
     console.log(payload)
-    axios.post(url, payload)
-      .then(response => {
+    axios
+      .post(url, payload)
+      .then((response) => {
         console.log(response.data);
-        navigate('/usercart')
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   };
-  
+
+  const AddToCart = (product) => {
+    const url = "http://localhost:3030/Users/addtocart";
+
+    const payload = {
+      user: user._id,
+      product: product,
+    };
+    console.log(payload);
+    axios
+      .post(url, payload)
+      .then((response) => {
+        console.log(response.data);
+        navigate("/usercart");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div>

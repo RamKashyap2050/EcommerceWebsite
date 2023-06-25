@@ -3,7 +3,7 @@ const Users = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-
+const Wishlist = require("../models/WishlistModel");
 //Function that enables us to Signup
 const registerUser = asyncHandler(async (req, res) => {
   const { user_name, phone, email, password } = req.body;
@@ -108,8 +108,8 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const updateClientProfilePhoto = asyncHandler(async (req, res) => {
-  const profilePhotoPath = req.files.profilePhoto; 
-  const userID = req.params.userID; 
+  const profilePhotoPath = req.files.profilePhoto;
+  const userID = req.params.userID;
   if (!profilePhotoPath) {
     return res.status(400).json({ error: "Profile photo is required." });
   }
@@ -119,7 +119,7 @@ const updateClientProfilePhoto = asyncHandler(async (req, res) => {
 
     user.image = profilePhotoPath;
     const updatedUser = await user.save();
-    console.log(updatedUser)
+    console.log(updatedUser);
     res.status(200).json({
       ...updatedUser._doc,
       token: await generateToken(updatedUser._id),
@@ -156,6 +156,48 @@ const updateClientAddress = asyncHandler(async (req, res) => {
   }
 });
 
+const addtowishlist = asyncHandler(async (req, res) => {
+  const { user, product } = req.body;
+
+  const addtowishlist = await Wishlist.create({
+    user,
+    product,
+  });
+  res.status(201).json(addtowishlist)
+});
+
+const getWishlist = asyncHandler(async (req, res) => {
+  const { userID } = req.params;
+  console.log(userID)
+  
+  const getWishlistItem = await Wishlist.find({ user: userID })
+  .populate("product", "product_name product_description product_price stock_number images")
+  .populate("user", "user_name phone email")
+  .select("product user");
+
+  res.status(200).json(getWishlistItem);
+});
+
+const removeWishlist = asyncHandler(async (req, res) => {
+  const { product, user } = req.params;
+
+  try {
+    const wishlistItem = await Wishlist.findOne({
+      user: user,
+      product: product,
+    });
+
+    if (!wishlistItem) {
+      return res.status(404).json({ message: 'Wishlist item not found' });
+    }
+
+    await Wishlist.findByIdAndRemove(wishlistItem._id);
+
+    res.status(200).json({ message: 'Wishlist item removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -163,4 +205,12 @@ const generateToken = async (id) => {
   });
 };
 
-module.exports = { loginUser, registerUser, updateClientProfilePhoto, updateClientAddress };
+module.exports = {
+  loginUser,
+  registerUser,
+  updateClientProfilePhoto,
+  updateClientAddress,
+  addtowishlist,
+  getWishlist,
+  removeWishlist
+};

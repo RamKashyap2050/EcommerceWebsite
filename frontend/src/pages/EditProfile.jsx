@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import UserHeader from "../components/UserHeader";
 import Footer from "../components/Footer";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 const EditProfile = () => {
   const userData = JSON.parse(localStorage.getItem("UserData"));
@@ -251,7 +252,19 @@ const EditProfile = () => {
                 </Button>
               </form>
             </CardContent>
-          </Card>
+            <CardContent></CardContent>
+          </Card><br />
+          <Link
+            to="/userprofile"
+            style={{
+              textDecoration: "none",
+              color: "black",
+              margin: "auto",
+              textAlign: "center",
+            }}
+          >
+            <FaArrowAltCircleLeft /> Go to Profile Page
+          </Link>
         </div>
         <div
           style={{

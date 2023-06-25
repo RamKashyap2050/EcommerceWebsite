@@ -78,8 +78,8 @@ const UserProfile = () => {
   };
 
   const handleEdit = () => {
-    navigate("/editprofile")
-  }
+    navigate("/editprofile");
+  };
   return (
     <>
       <UserHeader />
@@ -94,17 +94,31 @@ const UserProfile = () => {
         >
           <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
             <CardContent style={{ display: "flex", justifyContent: "center" }}>
-              <img
-                src={convertImageBufferToBase64(userData.image.data)}
-                alt="Profile Photo"
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-                className="userprofilephoto"
-              />
+              {userData.image ? (
+                <img
+                  src={convertImageBufferToBase64(userData.image.data)}
+                  alt="Profile Photo"
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                  className="userprofilephoto"
+                />
+              ) : (
+                <img
+                  src={ProfilePhoto}
+                  alt="Default Profile Photo"
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                  className="userprofilephoto"
+                />
+              )}
               <label htmlFor="file-input">
                 <AddAPhotoSharpIcon style={{ cursor: "pointer" }} />
               </label>
@@ -116,6 +130,7 @@ const UserProfile = () => {
                 onChange={handleFileSelect}
               />
             </CardContent>
+
             <CardContent style={{ display: "flex" }}>
               <Typography>Name: &nbsp;&nbsp;</Typography>
               <Typography color="textSecondary">

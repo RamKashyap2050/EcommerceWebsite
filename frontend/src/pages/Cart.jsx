@@ -208,22 +208,22 @@ const Cart = () => {
     try {
       const checkoutData = {
         userID: userData._id,
-        cartItems: cartItems.map(item => ({
+        cartItems: cartItems.map((item) => ({
           productID: item.product._id,
-          quantity: quantityMap[item._id]
+          quantity: quantityMap[item._id],
         })),
-        subtotal: calculateSubtotal()
+        subtotal: calculateSubtotal(),
       };
-      console.log(checkoutData)
-  
+      console.log(checkoutData);
+
       const response = await axios.post(
-        "http://localhost:3030/checkout",
+        "http://localhost:3030/Users/checkout",
         checkoutData
       );
-      
+
       // Handle the response from the server as needed
       console.log("Checkout response:", response.data);
-  
+
       // Navigate to a success or confirmation page
       navigate("/checkout-success");
     } catch (error) {
@@ -231,7 +231,6 @@ const Cart = () => {
       // Handle any error conditions, display error message, etc.
     }
   };
-  
 
   const calculateProductTotal = (item) => {
     return item.product.product_price * quantityMap[item._id];
@@ -343,6 +342,20 @@ const Cart = () => {
                 </p>
               </div>
             ))}
+            <div className="container">
+              <div className="form-group">
+                <label htmlFor="shippingAddress">Shipping Address</label>
+                <select id="shippingAddress" className="form-control" required>
+                  <option value="">Please Select an Address</option>
+                  {userData.saved_address.map((address, index) => (
+                    <option key={index} value={index}>
+                      {`${address.building}, ${address.streetName}, ${address.city}, ${address.province}, ${address.postalCode}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <div style={{ margin: "auto", textAlign: "center" }}>
               <h5 style={{ fontWeight: "700" }}>
                 Subtotal: ${calculateSubtotal()}
@@ -354,8 +367,6 @@ const Cart = () => {
               >
                 Proceed to Checkout
               </Button>
-
-
             </div>
           </div>
         ) : (
