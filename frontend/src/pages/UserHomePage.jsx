@@ -20,11 +20,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { ShoppingCart } from "@mui/icons-material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
+import { Alert } from "react-bootstrap";
 const UserHomePage = () => {
   const [data, setData] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-
+  const [show,setShow] = useState(false)
   const user = JSON.parse(localStorage.getItem("UserData"));
   const navigate = useNavigate();
 
@@ -54,7 +54,6 @@ const UserHomePage = () => {
   // ...
 
   const handleClick = (productId) => {
-    setIsFavorite(true);
 
     const url = `http://localhost:3030/Users/addtowishlist`;
 
@@ -69,7 +68,11 @@ const UserHomePage = () => {
         console.log(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        if (error.response && error.response.data && error.response.data.message) {
+          setShow(error.response.data.message);
+        } else {
+          setShow('An error occurred while adding to the wishlist.');
+        }
       });
   };
 
@@ -97,6 +100,7 @@ const UserHomePage = () => {
       <div>
         <UserHeader></UserHeader>
         <div className="p-3">
+          {show && <Alert>{show}</Alert>}
           <Grid container spacing={4}>
             {data.map((product, index) => (
               <Grid item xs={12} sm={6} md={4} key={product.id}>

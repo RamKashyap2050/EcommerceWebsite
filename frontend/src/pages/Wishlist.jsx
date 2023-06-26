@@ -9,6 +9,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
 import axios from "axios";
+import { Empty } from "antd";
+import Logo from "../error.jpg";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const Wishlist = () => {
   const [wishlistData, setWishlistData] = useState([]);
@@ -63,9 +66,7 @@ const Wishlist = () => {
       .then((response) => {
         console.log(response.data);
 
-        // Assuming the response indicates the successful removal of the wishlist item
         if (response.data.message === "Wishlist item removed") {
-          // Filter out the removed product from the wishlistData state
           const updatedWishlist = wishlistData.filter(
             (item) => item._id !== product._id
           );
@@ -93,92 +94,111 @@ const Wishlist = () => {
       <UserHeader />
       {userData ? (
         <div>
-          {/* Display wishlist data here */}
           {wishlistData ? (
-            <div>
-              {wishlistData.map((item, index) => (
-                <div key={index} className="cardofcart mb-4">
-                  <div className="carousel-container" key={item.id}>
-                    <div
-                      id={`carousel-${item.id}-${index}`}
-                      className="carousel slide"
-                      data-ride="carousel"
-                    >
-                      <div className="carousel-inner">
-                        {item.product.images.map((image, imageIndex) => (
-                          <div
-                            className={`carousel-item ${
-                              imageIndex === 0 ? "active" : ""
-                            }`}
-                            key={imageIndex}
-                          >
-                            <img
-                              src={convertImageBufferToBase64(image)}
-                              alt={`Product Image ${imageIndex + 1}`}
-                              className="product-image"
-                            />
-                          </div>
-                        ))}
+            wishlistData.length > 0 ? (
+              <div>
+                {wishlistData.map((item, index) => (
+                  <div key={index} className="cardofcart mb-4">
+                    <div className="carousel-container" key={item.id}>
+                      <div
+                        id={`carousel-${item.id}-${index}`}
+                        className="carousel slide"
+                        data-ride="carousel"
+                      >
+                        <div className="carousel-inner">
+                          {item.product.images.map((image, imageIndex) => (
+                            <div
+                              className={`carousel-item ${
+                                imageIndex === 0 ? "active" : ""
+                              }`}
+                              key={imageIndex}
+                            >
+                              <img
+                                src={convertImageBufferToBase64(image)}
+                                alt={`Product Image ${imageIndex + 1}`}
+                                className="product-image"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <a
+                          className="carousel-control-prev"
+                          href={`#carousel-${wishlistData.id}-${index}`}
+                          role="button"
+                          data-slide="prev"
+                        >
+                          <span
+                            className="carousel-control-prev-icon"
+                            aria-hidden="true"
+                          ></span>
+                          <span className="sr-only">Previous</span>
+                        </a>
+                        <a
+                          className="carousel-control-next"
+                          href={`#carousel-${wishlistData.id}-${index}`}
+                          role="button"
+                          data-slide="next"
+                        >
+                          <span
+                            className="carousel-control-next-icon"
+                            aria-hidden="true"
+                          ></span>
+                          <span className="sr-only">Next</span>
+                        </a>
                       </div>
-                      <a
-                        className="carousel-control-prev"
-                        href={`#carousel-${wishlistData.id}-${index}`}
-                        role="button"
-                        data-slide="prev"
-                      >
-                        <span
-                          className="carousel-control-prev-icon"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="sr-only">Previous</span>
-                      </a>
-                      <a
-                        className="carousel-control-next"
-                        href={`#carousel-${wishlistData.id}-${index}`}
-                        role="button"
-                        data-slide="next"
-                      >
-                        <span
-                          className="carousel-control-next-icon"
-                          aria-hidden="true"
-                        ></span>
-                        <span className="sr-only">Next</span>
-                      </a>
                     </div>
+                    <h5>{item.product.product_name}</h5>
+                    <p>Price: ${item.product.product_price}</p>
+                    {item.product.stock_number <= 0 ? (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        style={{ width: "75%", marginRight: "1rem" }}
+                        disabled
+                      >
+                        Out of Stock
+                      </Button>
+                    ) : (
+                      <Button
+                        startIcon={<ShoppingCart />}
+                        variant="contained"
+                        color="primary"
+                        style={{ width: "75%", marginRight: "1rem" }}
+                        onClick={() => AddToCart(item.product._id)}
+                      >
+                        Add to Cart
+                      </Button>
+                    )}
+                    <Button
+                      variant="outlined"
+                      color=""
+                      style={{ width: "20%" }}
+                      onClick={() => handleRemoveWishlist(item)}
+                    >
+                      <DeleteOutlined style={{ color: "red" }} />
+                    </Button>
                   </div>
-                  <h5>{item.product.product_name}</h5>
-                  <p>Price: ${item.product.product_price}</p>
-                  {item.product.stock_number <= 0 ? (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      style={{ width: "75%", marginRight: "1rem" }}
-                      disabled
-                    >
-                      Out of Stock
-                    </Button>
-                  ) : (
-                    <Button
-                      startIcon={<ShoppingCart />}
-                      variant="contained"
-                      color="primary"
-                      style={{ width: "75%", marginRight: "1rem" }}
-                      onClick={() => AddToCart(item.product._id)}
-                    >
-                      Add to Cart
-                    </Button>
-                  )}
-                  <Button
-                    variant="outlined"
-                    color=""
-                    style={{ width: "20%" }}
-                    onClick={() => handleRemoveWishlist(item)}
-                  >
-                    <FavoriteIcon style={{ color: "red" }} />
-                  </Button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                <Empty
+                  image={<img src={Logo} alt="404 Error" className="image" />}
+                  imageStyle={{ height: 200 }}
+                  description={
+                    <div>
+                      <span style={{ fontWeight: "bold", fontSize: "30px" }}>
+                        Everything you like and Save, in one place
+                      </span>
+                      <span style={{ color: "#999" }}>
+                        <br />
+                        All you liked and saved will show up here
+                      </span>
+                    </div>
+                  }
+                />
+              </div>
+            )
           ) : (
             <p>Loading wishlist...</p>
           )}

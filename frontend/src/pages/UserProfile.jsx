@@ -77,6 +77,9 @@ const UserProfile = () => {
     return `data:image/jpeg;base64,${base64String}`;
   };
 
+  const handleWishlist = () => {
+    navigate("/userwishlist")
+  }
   const handleEdit = () => {
     navigate("/editprofile");
   };
@@ -140,7 +143,7 @@ const UserProfile = () => {
           </Card>
           <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
             <CardContent>
-              <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", marginBottom:"1.25rem" }}>
                 <Typography>Email: &nbsp; &nbsp;</Typography>
                 <Typography color="textSecondary">{userData.email}</Typography>
               </div>
@@ -174,6 +177,7 @@ const UserProfile = () => {
                   variant="outlined"
                   color="error"
                   style={{ borderRadius: 20, marginBottom: "1.5rem" }}
+                  onClick={handleWishlist}
                 >
                   Wishlist
                 </Button>

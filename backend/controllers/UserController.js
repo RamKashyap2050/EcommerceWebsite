@@ -159,12 +159,19 @@ const updateClientAddress = asyncHandler(async (req, res) => {
 const addtowishlist = asyncHandler(async (req, res) => {
   const { user, product } = req.body;
 
-  const addtowishlist = await Wishlist.create({
-    user,
-    product,
-  });
-  res.status(201).json(addtowishlist)
+  const existingEntry = await Wishlist.findOne({ user, product });
+
+  if (existingEntry) {
+    res.status(400).json({ message: 'Entry already exists in the wishlist.' });
+  } else {
+    const newEntry = await Wishlist.create({
+      user,
+      product,
+    });
+    res.status(201).json(newEntry);
+  }
 });
+
 
 const getWishlist = asyncHandler(async (req, res) => {
   const { userID } = req.params;
