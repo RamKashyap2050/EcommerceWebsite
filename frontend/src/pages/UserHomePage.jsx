@@ -32,7 +32,7 @@ const UserHomePage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3030/Admin/getProducts"
+          `/Admin/getProducts`
         );
         console.log("Data:", response.data);
         setData(response.data);
