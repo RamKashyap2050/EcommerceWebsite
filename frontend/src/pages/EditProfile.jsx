@@ -64,7 +64,7 @@ const EditProfile = () => {
     };
 
     axios
-      .put(`http://localhost:3030/Users/address/${userData._id}`, addressData)
+      .put(`/Users/address/${userData._id}`, addressData)
       .then((response) => {
         console.log(response);
       })

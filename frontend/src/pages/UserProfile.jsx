@@ -45,7 +45,7 @@ const UserProfile = () => {
 
       try {
         const response = await axios.put(
-          `http://localhost:3030/Users/updateprofilephoto/${userData._id}`,
+          `/Users/updateprofilephoto/${userData._id}`,
           formData,
           {
             headers: {
@@ -78,8 +78,8 @@ const UserProfile = () => {
   };
 
   const handleWishlist = () => {
-    navigate("/userwishlist")
-  }
+    navigate("/userwishlist");
+  };
   const handleEdit = () => {
     navigate("/editprofile");
   };
@@ -143,7 +143,7 @@ const UserProfile = () => {
           </Card>
           <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
             <CardContent>
-              <div style={{ display: "flex", marginBottom:"1.25rem" }}>
+              <div style={{ display: "flex", marginBottom: "1.25rem" }}>
                 <Typography>Email: &nbsp; &nbsp;</Typography>
                 <Typography color="textSecondary">{userData.email}</Typography>
               </div>
