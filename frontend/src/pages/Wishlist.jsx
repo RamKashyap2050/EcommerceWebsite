@@ -20,7 +20,7 @@ const Wishlist = () => {
   const navigate = useNavigate();
 
   const AddToCart = (product) => {
-    const url = "http://localhost:3030/Users/addtocart";
+    const url = `/Users/addtocart`;
 
     const payload = {
       user: userData._id,
@@ -43,7 +43,7 @@ const Wishlist = () => {
       const fetchWishlistData = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3030/Users/getwishlist/${userData._id}`
+            `/Users/getwishlist/${userData._id}`
           );
           console.log(response.data);
           setWishlistData(response.data);
@@ -59,7 +59,7 @@ const Wishlist = () => {
   // ...
   const handleRemoveWishlist = (product) => {
     console.log(product);
-    const url = `http://localhost:3030/Users/removewishlist/${userData._id}/${product.product._id}`;
+    const url = `/Users/removewishlist/${userData._id}/${product.product._id}`;
 
     axios
       .delete(url)

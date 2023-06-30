@@ -168,7 +168,7 @@ const Cart = () => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3030/Users/getcart/${userID}`
+          `/Users/getcart/${userID}`
         );
         console.log("Data:", response.data);
         setCartItems(response.data);
@@ -217,7 +217,7 @@ const Cart = () => {
       console.log(checkoutData);
 
       const response = await axios.post(
-        "http://localhost:3030/Users/checkout",
+        `/Users/checkout`,
         checkoutData
       );
 

@@ -55,7 +55,7 @@ const UserHomePage = () => {
 
   const handleClick = (productId) => {
 
-    const url = `http://localhost:3030/Users/addtowishlist`;
+    const url = `/Users/addtowishlist`;
 
     const payload = {
       user: user._id,
@@ -77,7 +77,7 @@ const UserHomePage = () => {
   };
 
   const AddToCart = (product) => {
-    const url = "http://localhost:3030/Users/addtocart";
+    const url = `/Users/addtocart`;
 
     const payload = {
       user: user._id,
@@ -99,7 +99,7 @@ const UserHomePage = () => {
 
     <div>
       <div>
-        
+
       </div>
       <div>
         <UserHeader></UserHeader>
