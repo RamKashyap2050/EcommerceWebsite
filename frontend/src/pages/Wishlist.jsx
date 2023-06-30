@@ -92,6 +92,9 @@ const Wishlist = () => {
   return (
     <div>
       <UserHeader />
+      <div>
+        
+      </div>
       {userData ? (
         <div>
           {wishlistData ? (

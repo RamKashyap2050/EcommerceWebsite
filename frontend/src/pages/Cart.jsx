@@ -253,6 +253,9 @@ const Cart = () => {
   return (
     <div>
       <UserHeader />
+      <div>
+        
+      </div>
       {userData ? (
         cartItems && cartItems.length > 0 ? (
           <div>
