@@ -19,8 +19,12 @@ connectDB();
 
 const app = express();
 app.use(fileupload());
-app.use(cors());
-app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:3030", 
+  methods: "GET, POST, PUT, DELETE",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
+}));app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
