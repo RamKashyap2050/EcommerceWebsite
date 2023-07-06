@@ -46,7 +46,7 @@ const SignupPage = () => {
           phone: formData.phone,
         };
 
-        const response = await axios.post("http://localhost:3030/Users/register", userData);
+        const response = await axios.post(`/Users/register`, userData);
         console.log(response.data);
         localStorage.setItem("UserData", JSON.stringify(response.data));
         if (response.data) {

@@ -20,12 +20,7 @@ connectDB();
 const app = express();
 app.use(fileupload());
 app.use(express.json());
-const corsOptions = {
-  origin: '*', // Allow requests only from this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
-};
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -46,7 +41,6 @@ if (process.env.NODE_ENV === "production") {
 } else {
   app.get("/", (req, res) => res.send("Please Activate Production"));
 }
-
 
 app.use(errorHandler);
 app.listen(PORT, () => console.log(`Server is running at ${PORT}`));

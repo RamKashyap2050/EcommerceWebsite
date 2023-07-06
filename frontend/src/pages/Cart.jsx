@@ -160,16 +160,14 @@ import NoProducts from "../components/NoProducts";
 import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const userData = JSON.parse(localStorage.getItem("UserData"));
-  const userID = userData._id;
+  const userID = userData?._id;
   const [cartItems, setCartItems] = useState([]);
   const [quantityMap, setQuantityMap] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get(
-          `/Users/getcart/${userID}`
-        );
+        const response = await axios.get(`/Users/getcart/${userID}`);
         console.log("Data:", response.data);
         setCartItems(response.data);
         // Initialize the quantity map with default quantity of 1 for each item
@@ -216,10 +214,7 @@ const Cart = () => {
       };
       console.log(checkoutData);
 
-      const response = await axios.post(
-        `/Users/checkout`,
-        checkoutData
-      );
+      const response = await axios.post(`/Users/checkout`, checkoutData);
 
       // Handle the response from the server as needed
       console.log("Checkout response:", response.data);
@@ -253,9 +248,7 @@ const Cart = () => {
   return (
     <div>
       <UserHeader />
-      <div>
-        
-      </div>
+      <div></div>
       {userData ? (
         cartItems && cartItems.length > 0 ? (
           <div>

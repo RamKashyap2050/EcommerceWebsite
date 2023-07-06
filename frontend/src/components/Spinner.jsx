@@ -1,24 +1,20 @@
 import React from "react";
-import { BeatLoader } from "react-spinners";
+import { Spin } from "antd";
 
 const Spinner = () => {
-  const cssOverride = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "72vh",
-  };
+  const spinSize = 600; // Adjust the size as needed
 
   return (
-    <>
-      <BeatLoader
-        color="rgba(20, 49, 213, 1)"
-        cssOverride={cssOverride}
-        margin={10}
-        size={15}
-        speedMultiplier={1}
-      />
-    </>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "72vh",
+      }}
+    >
+      <Spin size="large" tip="Loading" />
+    </div>
   );
 };
 
