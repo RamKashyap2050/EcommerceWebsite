@@ -351,6 +351,12 @@ const Cart = () => {
                 </select>
               </div>
             </div>
+            <div className="container">
+              <a href="/editprofile">
+                {" "}
+                <span>Want to add a new Address?</span>
+              </a>
+            </div>
 
             <div style={{ margin: "auto", textAlign: "center" }}>
               <h5 style={{ fontWeight: "700" }}>

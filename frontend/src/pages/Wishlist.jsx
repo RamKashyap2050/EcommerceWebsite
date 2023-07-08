@@ -12,8 +12,10 @@ import axios from "axios";
 import { Empty } from "antd";
 import Logo from "../error.jpg";
 import { DeleteOutlined } from "@ant-design/icons";
+import Spinner from "../components/Spinner";
 
 const Wishlist = () => {
+  const [loading, setIsLoading] = useState(true);
   const [wishlistData, setWishlistData] = useState([]);
   const userData = JSON.parse(localStorage.getItem("UserData"));
   const [isFavorite, setIsFavorite] = useState(false);
@@ -47,8 +49,13 @@ const Wishlist = () => {
           );
           console.log(response.data);
           setWishlistData(response.data);
+          if (wishlistData.length > 0) {
+            setIsLoading(false);
+          }
+          setIsLoading(false)
         } catch (error) {
           console.error("Error:", error);
+          setIsLoading(false);
         }
       };
 
@@ -92,9 +99,7 @@ const Wishlist = () => {
   return (
     <div>
       <UserHeader />
-      <div>
-        
-      </div>
+      <div></div>
       {userData ? (
         <div>
           {wishlistData ? (
@@ -184,26 +189,60 @@ const Wishlist = () => {
                 ))}
               </div>
             ) : (
-              <div style={{ textAlign: "center", marginTop: "2rem" }}>
-                <Empty
-                  image={<img src={Logo} alt="404 Error" className="image" />}
-                  imageStyle={{ height: 200 }}
-                  description={
-                    <div>
-                      <span style={{ fontWeight: "bold", fontSize: "30px" }}>
-                        Everything you like and Save, in one place
-                      </span>
-                      <span style={{ color: "#999" }}>
-                        <br />
-                        All you liked and saved will show up here
-                      </span>
+              <>
+                <div>
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                      <Empty
+                        image={
+                          <img src={Logo} alt="404 Error" className="image" />
+                        }
+                        imageStyle={{ height: 200 }}
+                        description={
+                          <div>
+                            <span
+                              style={{ fontWeight: "bold", fontSize: "30px" }}
+                            >
+                              Everything you like and Save, in one place
+                            </span>
+                            <span style={{ color: "#999" }}>
+                              <br />
+                              All you liked and saved will show up here
+                            </span>
+                          </div>
+                        }
+                      />
                     </div>
-                  }
-                />
-              </div>
+                  )}
+                </div>
+              </>
             )
           ) : (
-            <p>Loading wishlist...</p>
+            <div>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                  <Empty
+                    image={<img src={Logo} alt="404 Error" className="image" />}
+                    imageStyle={{ height: 200 }}
+                    description={
+                      <div>
+                        <span style={{ fontWeight: "bold", fontSize: "30px" }}>
+                          Everything you like and Save, in one place
+                        </span>
+                        <span style={{ color: "#999" }}>
+                          <br />
+                          All you liked and saved will show up here
+                        </span>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+            </div>
           )}
         </div>
       ) : (

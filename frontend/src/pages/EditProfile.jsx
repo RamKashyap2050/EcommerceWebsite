@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,13 +10,20 @@ import {
   Card,
   CardContent,
 } from "@material-ui/core";
+import { FaTrashAlt } from "react-icons/fa";
 import UserHeader from "../components/UserHeader";
 import Footer from "../components/Footer";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 const EditProfile = () => {
-  const userData = JSON.parse(localStorage.getItem("UserData"));
+  const [userData, setUserData] = useState(() => {
+    const storedUserData = JSON.parse(localStorage.getItem("UserData"));
+    return storedUserData;
+  });
 
+  useEffect(() => {
+    setUserData(JSON.parse(localStorage.getItem("UserData")));
+  }, []);
   const [formData, setFormData] = useState({
     user_name: "",
     email: "",
@@ -66,7 +73,14 @@ const EditProfile = () => {
     axios
       .put(`/Users/address/${userData._id}`, addressData)
       .then((response) => {
-        console.log(response);
+        const updatedUserData = {
+          ...userData,
+          saved_address: response.data.saved_address,
+        };
+        console.log(updatedUserData);
+
+        setUserData(updatedUserData);
+        localStorage.setItem("UserData", JSON.stringify(updatedUserData));
       })
       .catch((error) => {
         console.error(error);
@@ -253,7 +267,8 @@ const EditProfile = () => {
               </form>
             </CardContent>
             <CardContent></CardContent>
-          </Card><br />
+          </Card>
+          <br />
           <Link
             to="/userprofile"
             style={{
@@ -282,10 +297,13 @@ const EditProfile = () => {
                 border: "1px solid #ccc",
                 padding: "1rem",
                 margin: "1rem",
-                width: "300px",
+                width: "300px"
               }}
-            >
-              <h4>Address {index + 1}</h4>
+            > 
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+            <h4>Address {index + 1}</h4>
+              <button className="btn btn-danger" ><FaTrashAlt /></button>
+            </div>
               <p>Building: {address.building}</p>
               <p>Street Name: {address.streetName}</p>
               <p>City: {address.city}</p>

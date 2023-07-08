@@ -84,7 +84,7 @@ const loginUser = asyncHandler(async (req, res) => {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
 
       if (isPasswordMatch) {
-        res.status(200).json({
+        const userData = {
           _id: user.id,
           user_name: user.user_name,
           phone: user.phone,
@@ -92,7 +92,14 @@ const loginUser = asyncHandler(async (req, res) => {
           image: user.image,
           saved_address: user.saved_address,
           token: await generateToken(user.id),
-        });
+        };
+
+        const userDataString = JSON.stringify(userData);
+        const userDataSizeInBytes = Buffer.byteLength(userDataString, "utf8");
+
+        console.log(`Size of userData: ${userDataSizeInBytes} bytes`);
+
+        res.status(200).json(userData);
       } else {
         res.status(400);
         throw new Error("Incorrect password");
@@ -110,9 +117,19 @@ const loginUser = asyncHandler(async (req, res) => {
 const updateClientProfilePhoto = asyncHandler(async (req, res) => {
   const profilePhotoPath = req.files.profilePhoto;
   const userID = req.params.userID;
-  console.log("Profile Path" , profilePhotoPath)
+  console.log("Profile Path", profilePhotoPath);
   if (!profilePhotoPath) {
     return res.status(400).json({ error: "Profile photo is required." });
+  }
+
+  // Check image size
+  const fileSizeInBytes = profilePhotoPath.size;
+  const fileSizeInMB = fileSizeInBytes / (1024 * 1024); // Convert to megabytes
+
+  if (fileSizeInMB > 2) {
+    return res
+      .status(400)
+      .json({ error: "Image size should not exceed 2 MB." });
   }
 
   try {
@@ -120,7 +137,7 @@ const updateClientProfilePhoto = asyncHandler(async (req, res) => {
 
     user.image = profilePhotoPath;
     const updatedUser = await user.save();
-    console.log("Updated User",updatedUser);
+    console.log("Updated User", updatedUser);
     res.status(200).json({
       ...updatedUser._doc,
       token: await generateToken(updatedUser._id),
@@ -145,7 +162,7 @@ const updateClientAddress = asyncHandler(async (req, res) => {
     user.saved_address.push(address);
 
     const updatedUser = await user.save();
-    console.log(updatedUser);
+    console.log("updated user with address",updatedUser);
 
     res.status(200).json({
       ...updatedUser._doc,
@@ -163,7 +180,7 @@ const addtowishlist = asyncHandler(async (req, res) => {
   const existingEntry = await Wishlist.findOne({ user, product });
 
   if (existingEntry) {
-    res.status(400).json({ message: 'Entry already exists in the wishlist.' });
+    res.status(400).json({ message: "Entry already exists in the wishlist." });
   } else {
     const newEntry = await Wishlist.create({
       user,
@@ -173,15 +190,17 @@ const addtowishlist = asyncHandler(async (req, res) => {
   }
 });
 
-
 const getWishlist = asyncHandler(async (req, res) => {
   const { userID } = req.params;
-  console.log(userID)
-  
+  console.log(userID);
+
   const getWishlistItem = await Wishlist.find({ user: userID })
-  .populate("product", "product_name product_description product_price stock_number images")
-  .populate("user", "user_name phone email")
-  .select("product user");
+    .populate(
+      "product",
+      "product_name product_description product_price stock_number images"
+    )
+    .populate("user", "user_name phone email")
+    .select("product user");
 
   res.status(200).json(getWishlistItem);
 });
@@ -196,14 +215,14 @@ const removeWishlist = asyncHandler(async (req, res) => {
     });
 
     if (!wishlistItem) {
-      return res.status(404).json({ message: 'Wishlist item not found' });
+      return res.status(404).json({ message: "Wishlist item not found" });
     }
 
     await Wishlist.findByIdAndRemove(wishlistItem._id);
 
-    res.status(200).json({ message: 'Wishlist item removed' });
+    res.status(200).json({ message: "Wishlist item removed" });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -220,5 +239,5 @@ module.exports = {
   updateClientAddress,
   addtowishlist,
   getWishlist,
-  removeWishlist
+  removeWishlist,
 };

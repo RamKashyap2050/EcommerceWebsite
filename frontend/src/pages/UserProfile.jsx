@@ -163,7 +163,7 @@ const UserProfile = () => {
               </div>
               <div style={{ display: "flex" }}>
                 <Typography>Phone: &nbsp;</Typography>
-                <Typography color="textSecondary">{userData.phone}</Typography>
+                <Typography color="textSecondary">+1 {userData.phone}</Typography>
               </div>
             </CardContent>
           </Card>
