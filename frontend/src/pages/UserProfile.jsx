@@ -8,6 +8,8 @@ import ProfilePhoto from "../ProfilePhoto.jpg";
 import AddAPhotoSharpIcon from "@mui/icons-material/AddAPhotoSharp";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+
 import {
   AccountCircle,
   ShoppingCart,
@@ -18,14 +20,16 @@ import {
 } from "@mui/icons-material";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import NotFoundPage from "../components/404";
-
+import Spinner from "../components/Spinner";
 const UserProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-
+  const [show, setShow] = useState(false);
+  const [loading, setIsLoading] = useState(true);
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("UserData"));
     setUserData(storedUserData);
+    setIsLoading(false);
   }, []);
 
   function handleLogout() {
@@ -38,11 +42,19 @@ const UserProfile = () => {
   const handleFileSelect = async (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-  
+
     if (file) {
+      // Check file size
+      if (file.size > 1 * 1024 * 1024) {
+        // 1MB limit
+        setShow(true);
+        console.log("File size exceeding");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("profilePhoto", file);
-  
+
       try {
         const response = await axios.put(
           `/Users/updateprofilephoto/${userData._id}`,
@@ -53,7 +65,7 @@ const UserProfile = () => {
             },
           }
         );
-  
+
         if (response.data) {
           const updatedUserData = { ...userData, ...response.data };
           console.log(updatedUserData);
@@ -78,7 +90,6 @@ const UserProfile = () => {
       }
     }
   };
-  
 
   const convertImageBufferToBase64 = (imageBuffer) => {
     if (!imageBuffer) {
@@ -97,9 +108,7 @@ const UserProfile = () => {
   return (
     <>
       <UserHeader />
-      <div>
-
-      </div>
+      <div></div>
       {userData ? (
         <div
           style={{
@@ -110,6 +119,15 @@ const UserProfile = () => {
           }}
         >
           <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
+            {show ? (
+              <Alert
+                onClose={() => {
+                  setShow(false);
+                }}
+              >
+                File size should be less than 1 MB
+              </Alert>
+            ) : null}
             <CardContent style={{ display: "flex", justifyContent: "center" }}>
               {userData.image ? (
                 <img
@@ -163,7 +181,9 @@ const UserProfile = () => {
               </div>
               <div style={{ display: "flex" }}>
                 <Typography>Phone: &nbsp;</Typography>
-                <Typography color="textSecondary">+1 {userData.phone}</Typography>
+                <Typography color="textSecondary">
+                  +1 {userData.phone}
+                </Typography>
               </div>
             </CardContent>
           </Card>
@@ -241,7 +261,7 @@ const UserProfile = () => {
           </Card>
         </div>
       ) : (
-        <NotFoundPage />
+        <div> {loading ? <Spinner /> : <NotFoundPage />}</div>
       )}
       <Footer />
     </>
