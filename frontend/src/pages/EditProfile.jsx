@@ -59,6 +59,25 @@ const EditProfile = () => {
       });
   };
 
+  const handleremoveClientaddress = (addressIndex) => {
+    console.log("Clicked", addressIndex);
+  
+    const requestData = {
+      addressIndex: addressIndex,
+    };
+  
+    axios.delete(`Users/removeClientAddress/${userData._id}/${addressIndex}`, {
+      data: requestData,
+    })
+      .then((response) => {
+        setUserData(response.data);
+        localStorage.setItem("UserData", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
   const handleSubmitAddress = (event) => {
     event.preventDefault();
 
@@ -302,7 +321,7 @@ const EditProfile = () => {
             > 
             <div style={{display:"flex", justifyContent:"space-between"}}>
             <h4>Address {index + 1}</h4>
-              <button className="btn btn-danger" ><FaTrashAlt /></button>
+              <button className="btn btn-danger" onClick={() => handleremoveClientaddress(address)} ><FaTrashAlt /></button>
             </div>
               <p>Building: {address.building}</p>
               <p>Street Name: {address.streetName}</p>

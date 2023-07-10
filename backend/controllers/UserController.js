@@ -174,6 +174,34 @@ const updateClientAddress = asyncHandler(async (req, res) => {
   }
 });
 
+const removeClientAddress = asyncHandler(async (req, res) => {
+  const addressIndex = req.params.addressIndex; 
+  const userID = req.params.userID;
+
+  try {
+    const user = await Users.findById(userID);
+
+    if (addressIndex < 0 || addressIndex >= user.saved_address.length) {
+      return res.status(400).json({ error: "Invalid address index." });
+    }
+
+    const removedAddress = user.saved_address.splice(addressIndex, 1); 
+
+    const updatedUser = await user.save();
+    console.log("updated user with address", updatedUser);
+
+    res.status(200).json({
+      ...updatedUser._doc,
+      token: await generateToken(updatedUser._id),
+      removedAddress: removedAddress[0], 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+
 const addtowishlist = asyncHandler(async (req, res) => {
   const { user, product } = req.body;
 
@@ -240,4 +268,5 @@ module.exports = {
   addtowishlist,
   getWishlist,
   removeWishlist,
+  removeClientAddress
 };
