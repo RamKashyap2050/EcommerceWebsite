@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Wishlist = require("../models/WishlistModel");
+const sharp = require("sharp");
+
 //Function that enables us to Signup
 const registerUser = asyncHandler(async (req, res) => {
   const { user_name, phone, email, password } = req.body;
@@ -126,25 +128,51 @@ const updateClientProfilePhoto = asyncHandler(async (req, res) => {
   const fileSizeInBytes = profilePhotoPath.size;
   const fileSizeInMB = fileSizeInBytes / (1024 * 1024); // Convert to megabytes
 
-  if (fileSizeInMB > 2) {
-    return res
-      .status(400)
-      .json({ error: "Image size should not exceed 2 MB." });
-  }
+  if (fileSizeInMB > 1) {
+    try {
+      const compressedImage = await sharp(profilePhotoPath.data)
+        .resize(800) // Adjust the desired width or height for the compressed image
+        .jpeg({ quality: 80 }) // Adjust the quality setting as per your requirements
+        .toBuffer();
 
-  try {
-    const user = await Users.findById(userID);
+      const compressedImageSizeInBytes = compressedImage.length;
+      const compressedImageSizeInMB =
+        compressedImageSizeInBytes / (1024 * 1024);
 
-    user.image = profilePhotoPath;
-    const updatedUser = await user.save();
-    console.log("Updated User", updatedUser);
-    res.status(200).json({
-      ...updatedUser._doc,
-      token: await generateToken(updatedUser._id),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error." });
+      if (compressedImageSizeInMB > 1) {
+        return res
+          .status(400)
+          .json({ error: "Compressed image size should not exceed 1 MB." });
+      }
+
+      const user = await Users.findById(userID);
+      user.image.data = compressedImage;
+      user.image.contentType = profilePhotoPath.mimetype;
+
+      const updatedUser = await user.save();
+      console.log("Updated User", updatedUser);
+      res.status(200).json({
+        ...updatedUser._doc,
+        token: await generateToken(updatedUser._id),
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error." });
+    }
+  } else {
+    try {
+      const user = await Users.findById(userID);
+      user.image = profilePhotoPath;
+      const updatedUser = await user.save();
+      console.log("Updated User", updatedUser);
+      res.status(200).json({
+        ...updatedUser._doc,
+        token: await generateToken(updatedUser._id),
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error." });
+    }
   }
 });
 
@@ -162,7 +190,7 @@ const updateClientAddress = asyncHandler(async (req, res) => {
     user.saved_address.push(address);
 
     const updatedUser = await user.save();
-    console.log("updated user with address",updatedUser);
+    console.log("updated user with address", updatedUser);
 
     res.status(200).json({
       ...updatedUser._doc,
@@ -175,7 +203,7 @@ const updateClientAddress = asyncHandler(async (req, res) => {
 });
 
 const removeClientAddress = asyncHandler(async (req, res) => {
-  const addressIndex = req.params.addressIndex; 
+  const addressIndex = req.params.addressIndex;
   const userID = req.params.userID;
 
   try {
@@ -185,7 +213,7 @@ const removeClientAddress = asyncHandler(async (req, res) => {
       return res.status(400).json({ error: "Invalid address index." });
     }
 
-    const removedAddress = user.saved_address.splice(addressIndex, 1); 
+    const removedAddress = user.saved_address.splice(addressIndex, 1);
 
     const updatedUser = await user.save();
     console.log("updated user with address", updatedUser);
@@ -193,14 +221,13 @@ const removeClientAddress = asyncHandler(async (req, res) => {
     res.status(200).json({
       ...updatedUser._doc,
       token: await generateToken(updatedUser._id),
-      removedAddress: removedAddress[0], 
+      removedAddress: removedAddress[0],
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error." });
   }
 });
-
 
 const addtowishlist = asyncHandler(async (req, res) => {
   const { user, product } = req.body;
@@ -268,5 +295,5 @@ module.exports = {
   addtowishlist,
   getWishlist,
   removeWishlist,
-  removeClientAddress
+  removeClientAddress,
 };

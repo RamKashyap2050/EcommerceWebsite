@@ -44,13 +44,7 @@ const UserProfile = () => {
     setSelectedFile(file);
 
     if (file) {
-      // Check file size
-      if (file.size > 1 * 1024 * 1024) {
-        // 1MB limit
-        setShow(true);
-        console.log("File size exceeding");
-        return;
-      }
+ 
 
       const formData = new FormData();
       formData.append("profilePhoto", file);
@@ -119,15 +113,6 @@ const UserProfile = () => {
           }}
         >
           <Card style={{ width: "300px", marginBottom: "1.5rem" }}>
-            {show ? (
-              <Alert
-                onClose={() => {
-                  setShow(false);
-                }}
-              >
-                File size should be less than 1 MB
-              </Alert>
-            ) : null}
             <CardContent style={{ display: "flex", justifyContent: "center" }}>
               {userData.image ? (
                 <img
