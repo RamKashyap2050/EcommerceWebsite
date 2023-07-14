@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import UserHeader from "../components/UserHeader";
 import Footer from "../components/Footer";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaTicketAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Buffer } from "buffer";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
 import { Edit, Delete, ShoppingBasket } from "@material-ui/icons";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { ShoppingCart } from "@mui/icons-material";
+import { DoneOutline, ShoppingCart } from "@mui/icons-material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Alert } from "react-bootstrap";
@@ -28,23 +28,45 @@ const UserHomePage = () => {
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("UserData"));
+  const userID = user._id;
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const [productsResponse, cartItemsResponse, wishlistItemsResponse] = await Promise.all([
+        axios.get("/Admin/getProducts"),
+        axios.get(`/Users/getcart/${userID}`),
+        axios.get(`/Users/getwishlist/${userID}`), // New wishlist API URL
+      ]);
+  
+      console.log("Products Data:", productsResponse.data);
+      console.log("Cart Items:", cartItemsResponse.data);
+      console.log("Wishlist Items:", wishlistItemsResponse.data);
+  
+      const updatedData = productsResponse.data.map((product) => {
+        const addedToCart = cartItemsResponse.data.some(
+          (item) => item.product._id === product._id
+        );
+        const addedToWishlist = wishlistItemsResponse.data.some(
+          (item) => item.product._id === product._id
+        );
+        return { ...product, addedToCart, addedToWishlist };
+      });
+  
+      setData(updatedData);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+      setIsLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/Admin/getProducts`);
-        console.log("Data:", response.data);
-        setData(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error:", error);
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [userID]);
+  
+
   const convertImageBufferToBase64 = (imageBuffer) => {
     if (!imageBuffer) {
       return null;
@@ -52,8 +74,6 @@ const UserHomePage = () => {
     const base64String = Buffer.from(imageBuffer.data).toString("base64");
     return `data:image/jpeg;base64,${base64String}`;
   };
-
-  // ...
 
   const handleClick = (productId) => {
     const url = `/Users/addtowishlist`;
@@ -190,19 +210,32 @@ const UserHomePage = () => {
                           Out of Stock
                         </Button>
                       ) : (
-                        <Button
-                          startIcon={<ShoppingCart />}
-                          variant="contained"
-                          color="primary"
-                          style={{ width: "60%" }}
-                          onClick={() => AddToCart(product._id)}
-                        >
-                          Add to Cart
-                        </Button>
+                        <>
+                          {product.addedToCart ? (
+                            <Button
+                            startIcon={<DoneOutline/>}
+                              style={{ width: "60%" }}
+                              variant="contained"
+                              color="success"
+                            >
+                              Added to Cart
+                            </Button>
+                          ) : (
+                            <Button
+                              startIcon={<ShoppingCart />}
+                              variant="contained"
+                              color="primary"
+                              style={{ width: "60%" }}
+                              onClick={() => AddToCart(product._id)}
+                            >
+                              Add to Cart
+                            </Button>
+                          )}
+                        </>
                       )}
                       <Button
                         startIcon={
-                          isFavorite ? (
+                          product.addedToWishlist ? (
                             <FavoriteIcon style={{ color: "red" }} />
                           ) : (
                             <FavoriteBorderIcon />
@@ -212,8 +245,9 @@ const UserHomePage = () => {
                         color=""
                         style={{ width: "40%" }}
                         onClick={() => handleClick(product._id)}
+                        disabled={product.addedToWishlist}
                       >
-                        Wishlist
+                       <>{product.addedToWishlist ? "Added" : "Wishlist"}</> 
                       </Button>
                     </CardActions>
                   </Card>

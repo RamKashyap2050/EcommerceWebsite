@@ -119,7 +119,7 @@ const loginUser = asyncHandler(async (req, res) => {
 const updateClientProfilePhoto = asyncHandler(async (req, res) => {
   const profilePhotoPath = req.files.profilePhoto;
   const userID = req.params.userID;
-  console.log("Profile Path", profilePhotoPath);
+  // console.log("Profile Path", profilePhotoPath);
   if (!profilePhotoPath) {
     return res.status(400).json({ error: "Profile photo is required." });
   }
@@ -138,6 +138,7 @@ const updateClientProfilePhoto = asyncHandler(async (req, res) => {
       const compressedImageSizeInBytes = compressedImage.length;
       const compressedImageSizeInMB =
         compressedImageSizeInBytes / (1024 * 1024);
+      console.log(compressedImageSizeInMB);
 
       if (compressedImageSizeInMB > 1) {
         return res
@@ -150,7 +151,7 @@ const updateClientProfilePhoto = asyncHandler(async (req, res) => {
       user.image.contentType = profilePhotoPath.mimetype;
 
       const updatedUser = await user.save();
-      console.log("Updated User", updatedUser);
+      // console.log("Updated User", updatedUser);
       res.status(200).json({
         ...updatedUser._doc,
         token: await generateToken(updatedUser._id),
