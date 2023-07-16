@@ -11,6 +11,10 @@ const categorySchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter your Desc"],
     },
+    image: {
+      data:Buffer,
+      ContentType: String
+  }
   },
   { collection: "Category", timestamp: true }
 );

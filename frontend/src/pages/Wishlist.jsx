@@ -52,7 +52,7 @@ const Wishlist = () => {
           if (wishlistData.length > 0) {
             setIsLoading(false);
           }
-          setIsLoading(false)
+          setIsLoading(false);
         } catch (error) {
           console.error("Error:", error);
           setIsLoading(false);
@@ -66,7 +66,7 @@ const Wishlist = () => {
   // ...
   const handleRemoveWishlist = (product) => {
     console.log(product);
-    const url = `/Users/removewishlist/${userData._id}/${product.product._id}`;
+    const url = `/Users/removewishlist/${userData._id}/${product.product?._id}`;
 
     axios
       .delete(url)
@@ -75,7 +75,7 @@ const Wishlist = () => {
 
         if (response.data.message === "Wishlist item removed") {
           const updatedWishlist = wishlistData.filter(
-            (item) => item._id !== product._id
+            (item) => item?._id !== product?._id
           );
           setWishlistData(updatedWishlist);
         }
@@ -109,25 +109,27 @@ const Wishlist = () => {
                   <div key={index} className="cardofcart mb-4">
                     <div className="carousel-container" key={item.id}>
                       <div
-                        id={`carousel-${item.id}-${index}`}
+                        id={`carousel-${item?.id}-${index}`}
                         className="carousel slide"
                         data-ride="carousel"
                       >
                         <div className="carousel-inner">
-                          {item.product.images.map((image, imageIndex) => (
-                            <div
-                              className={`carousel-item ${
-                                imageIndex === 0 ? "active" : ""
-                              }`}
-                              key={imageIndex}
-                            >
-                              <img
-                                src={convertImageBufferToBase64(image)}
-                                alt={`Product Image ${imageIndex + 1}`}
-                                className="product-image"
-                              />
-                            </div>
-                          ))}
+                          {item.product &&
+                            item.product.images &&
+                            item.product.images.map((image, imageIndex) => (
+                              <div
+                                className={`carousel-item ${
+                                  imageIndex === 0 ? "active" : ""
+                                }`}
+                                key={imageIndex}
+                              >
+                                <img
+                                  src={convertImageBufferToBase64(image)}
+                                  alt={`Product Image ${imageIndex + 1}`}
+                                  className="product-image"
+                                />
+                              </div>
+                            ))}
                         </div>
                         <a
                           className="carousel-control-prev"
@@ -155,9 +157,9 @@ const Wishlist = () => {
                         </a>
                       </div>
                     </div>
-                    <h5>{item.product.product_name}</h5>
-                    <p>Price: ${item.product.product_price}</p>
-                    {item.product.stock_number <= 0 ? (
+                    <h5>{item.product?.product_name}</h5>
+                    <p>Price: ${item.product?.product_price}</p>
+                    {item.product?.stock_number <= 0 ? (
                       <Button
                         variant="contained"
                         color="secondary"
@@ -172,7 +174,7 @@ const Wishlist = () => {
                         variant="contained"
                         color="primary"
                         style={{ width: "75%", marginRight: "1rem" }}
-                        onClick={() => AddToCart(item.product._id)}
+                        onClick={() => AddToCart(item.product?._id)}
                       >
                         Add to Cart
                       </Button>

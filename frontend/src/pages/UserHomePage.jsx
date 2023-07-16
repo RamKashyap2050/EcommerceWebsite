@@ -22,6 +22,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Alert } from "react-bootstrap";
 import Spinner from "../components/Spinner";
+import OverlayedImage from "../components/HomeImage";
 const UserHomePage = () => {
   const [data, setData] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -34,26 +35,27 @@ const UserHomePage = () => {
 
   const fetchData = async () => {
     try {
-      const [productsResponse, cartItemsResponse, wishlistItemsResponse] = await Promise.all([
-        axios.get("/Admin/getProducts"),
-        axios.get(`/Users/getcart/${userID}`),
-        axios.get(`/Users/getwishlist/${userID}`), // New wishlist API URL
-      ]);
-  
+      const [productsResponse, cartItemsResponse, wishlistItemsResponse] =
+        await Promise.all([
+          axios.get("/Admin/getProducts"),
+          axios.get(`/Users/getcart/${userID}`),
+          axios.get(`/Users/getwishlist/${userID}`), // New wishlist API URL
+        ]);
+
       console.log("Products Data:", productsResponse.data);
       console.log("Cart Items:", cartItemsResponse.data);
       console.log("Wishlist Items:", wishlistItemsResponse.data);
-  
+
       const updatedData = productsResponse.data.map((product) => {
         const addedToCart = cartItemsResponse.data.some(
-          (item) => item.product._id === product._id
+          (item) => item.product?._id === product?._id
         );
         const addedToWishlist = wishlistItemsResponse.data.some(
-          (item) => item.product._id === product._id
+          (item) => item.product?._id === product?._id
         );
         return { ...product, addedToCart, addedToWishlist };
       });
-  
+
       setData(updatedData);
       setIsLoading(false);
     } catch (error) {
@@ -61,11 +63,10 @@ const UserHomePage = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, [userID]);
-  
 
   const convertImageBufferToBase64 = (imageBuffer) => {
     if (!imageBuffer) {
@@ -125,6 +126,7 @@ const UserHomePage = () => {
       <div></div>
       <div>
         <UserHeader></UserHeader>
+        <OverlayedImage />
         <div className="p-3">
           {show && <Alert>{show}</Alert>}
           {isLoading ? (
@@ -213,12 +215,12 @@ const UserHomePage = () => {
                         <>
                           {product.addedToCart ? (
                             <Button
-                            startIcon={<DoneOutline/>}
+                              startIcon={<DoneOutline />}
                               style={{ width: "60%" }}
                               variant="contained"
                               color="success"
                             >
-                              Added to Cart
+                              Added 
                             </Button>
                           ) : (
                             <Button
@@ -247,7 +249,7 @@ const UserHomePage = () => {
                         onClick={() => handleClick(product._id)}
                         disabled={product.addedToWishlist}
                       >
-                       <>{product.addedToWishlist ? "Added" : "Wishlist"}</> 
+                        <>{product.addedToWishlist ? "Added" : "Wishlist"}</>
                       </Button>
                     </CardActions>
                   </Card>

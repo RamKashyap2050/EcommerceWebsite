@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Category = require("../models/CategoryModel");
 const Product = require("../models/ProductModel");
+const sharp = require("sharp")
 //Function which enables User to Login
 const loginAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -61,34 +62,46 @@ const createProduct = asyncHandler(async (req, res) => {
     CategoryID
   );
 
-  const file1 = req.files.file1
-  const file2 = req.files.file2 
-  const file3 = req.files.file3 
+  const file1 = req.files.file1;
+  const file2 = req.files.file2;
+  const file3 = req.files.file3;
 
   console.log(file1, file2, file3);
 
   if (!file1 || !file2 || !file3) {
     res.status(400);
-    throw new Error("Please upload all the files!");
+    throw new Error('Please upload all the files!');
   }
+
+  const compressImage = async (file) => {
+    const compressedImage = await sharp(file.data)
+      .resize(800, 800)
+      .jpeg({ quality: 80 })
+      .toBuffer();
+
+    return compressedImage;
+  };
 
   const images = [];
 
   if (file1) {
+    const compressedImage = await compressImage(file1);
     images.push({
-      data: file1.data,
+      data: compressedImage,
     });
   }
 
   if (file2) {
+    const compressedImage = await compressImage(file2);
     images.push({
-      data: file2.data,
+      data: compressedImage,
     });
   }
 
   if (file3) {
+    const compressedImage = await compressImage(file3);
     images.push({
-      data: file3.data,
+      data: compressedImage,
     });
   }
 
@@ -100,12 +113,20 @@ const createProduct = asyncHandler(async (req, res) => {
     images,
     CategoryID,
   });
+  const NewProductString = JSON.stringify(newProduct);
+  const userDataSizeInBytes = Buffer.byteLength(NewProductString, "utf8");
 
+  console.log(`Size of New Product: ${userDataSizeInBytes} bytes`);
   res.status(201).json(newProduct);
 });
 
 const getProducts = asyncHandler(async(req,res) => {
     const getProducts = await Product.find({})
+    const userDataString = JSON.stringify(getProducts);
+    const userDataSizeInBytes = Buffer.byteLength(userDataString, "utf8");
+
+    console.log(`Size of userData: ${userDataSizeInBytes} bytes`);
+
 
     res.status(200).json(getProducts)
 })
