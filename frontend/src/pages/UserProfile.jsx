@@ -42,13 +42,11 @@ const UserProfile = () => {
   const handleFileSelect = async (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-
+  
     if (file) {
- 
-
       const formData = new FormData();
       formData.append("profilePhoto", file);
-
+  
       try {
         const response = await axios.put(
           `/Users/updateprofilephoto/${userData._id}`,
@@ -59,31 +57,21 @@ const UserProfile = () => {
             },
           }
         );
-
+  
         if (response.data) {
-          const updatedUserData = { ...userData, ...response.data };
-          console.log(updatedUserData);
-          setUserData(updatedUserData, () => {
-            console.log(userData);
-            localStorage.setItem("UserData", JSON.stringify(updatedUserData));
-          });
+          const updatedUserData = { ...userData, image: response.data.image };
+          setUserData(updatedUserData);
+          localStorage.setItem("UserData", JSON.stringify(updatedUserData));
         }
+  
         return response.data;
       } catch (error) {
         console.error("Error updating profile photo:", error);
-        if (error.response) {
-          console.log("Response data:", error.response.data);
-          console.log("Response status:", error.response.status);
-          console.log("Response headers:", error.response.headers);
-        } else if (error.request) {
-          console.log("No response received:", error.request);
-        } else {
-          console.log("Error setting up request:", error.message);
-        }
-        console.log("Error config:", error.config);
+        // Error handling
       }
     }
   };
+  
 
   const convertImageBufferToBase64 = (imageBuffer) => {
     if (!imageBuffer) {

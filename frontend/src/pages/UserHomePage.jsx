@@ -29,7 +29,7 @@ const UserHomePage = () => {
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("UserData"));
-  const userID = user._id;
+  const userID = user?._id;
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
 
@@ -220,7 +220,7 @@ const UserHomePage = () => {
                               variant="contained"
                               color="success"
                             >
-                              Added 
+                              Added
                             </Button>
                           ) : (
                             <Button

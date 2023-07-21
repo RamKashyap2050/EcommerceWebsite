@@ -8,12 +8,12 @@ import Footer from "../components/Footer";
 import NoProducts from "../components/NoProducts";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
-
+import { FaTrash } from "react-icons/fa";
 const Cart = () => {
   const userData = JSON.parse(localStorage.getItem("UserData"));
   const userID = userData?._id;
   const [loading, setIsLoading] = useState(true);
-  const [cartItems, setCartItems] = useState([]);
+  let [cartItems, setCartItems] = useState([]);
   const [quantityMap, setQuantityMap] = useState({});
   const navigate = useNavigate();
   useEffect(() => {
@@ -98,6 +98,19 @@ const Cart = () => {
     const base64String = Buffer.from(imageBuffer.data).toString("base64");
     return `data:image/jpeg;base64,${base64String}`;
   };
+  const removeItem = (itemID) => {
+    axios
+      .delete(`/Users/removecart/${itemID}`)
+      .then((response) => {
+        console.log("Item removed successfully");
+        setCartItems((prevCartItems) =>
+          prevCartItems.filter((item) => item._id !== itemID)
+        );
+      })
+      .catch((error) => {
+        console.error("Error removing item:", error);
+      });
+  };
 
   return (
     <div>
@@ -177,14 +190,25 @@ const Cart = () => {
                   >
                     {quantityMap[item._id]}
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => decreaseQuantity(item._id)}
-                    style={{ width: "10%" }}
-                  >
-                    -
-                  </Button>
+                  {quantityMap[item._id] <= 1 ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => removeItem(item._id)}
+                      style={{ width: "10%" }}
+                    >
+                      <FaTrash />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => decreaseQuantity(item._id)}
+                      style={{ width: "10%" }}
+                    >
+                      -
+                    </Button>
+                  )}
                 </div>
                 <hr />
                 <p style={{ fontWeight: "700" }}>
@@ -230,7 +254,7 @@ const Cart = () => {
         )
       ) : (
         <> {loading ? <Spinner /> : <NotFoundPage />}</>
-        )}
+      )}
       <Footer />
     </div>
   );
