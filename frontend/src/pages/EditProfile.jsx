@@ -42,20 +42,40 @@ const EditProfile = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
+  const [profileData, setProfileData] = useState({
+    user_name: userData.user_name || "",
+    email: userData.email || "",
+    phone: userData.phone || "",
+  });
+
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleProfileChange = (event) => {
+    const { name, value } = event.target;
+    setProfileData((prevProfileData) => ({
+      ...prevProfileData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmitProfile = (event) => {
     event.preventDefault();
     axios
-      .post("<profile_submit_url>", formData) // Replace <profile_submit_url> with the actual endpoint URL to submit profile data
+      .put(`/Users/updateuser/${userData._id}`, profileData)
       .then((response) => {
-        // Handle success response
         console.log(response.data);
-        navigate("<success_route>"); // Replace <success_route> with the actual route where you want to navigate after successful submission
+        if (response.data) {
+          const updatedUserData = { ...userData, ...response.data };
+          setUserData(updatedUserData);
+          localStorage.setItem("UserData", JSON.stringify(updatedUserData));
+        }
+        navigate("/userprofile");
       })
       .catch((error) => {
-        // Handle error response
         console.error(error);
-        setShow(true);
-        setAlertMessage("Failed to save profile changes");
+        setShowError(true);
+        setErrorMessage("Failed to save profile changes");
       });
   };
 
@@ -135,38 +155,35 @@ const EditProfile = () => {
                 <TextField
                   variant="outlined"
                   margin="normal"
-                  required
                   fullWidth
                   id="name"
                   label="Name"
                   name="user_name"
                   autoComplete="name"
-                  value={formData.user_name}
-                  onChange={handleChange}
+                  value={profileData.user_name}
+                  onChange={handleProfileChange}
                 />
                 <TextField
                   variant="outlined"
                   margin="normal"
-                  required
                   fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  value={profileData.email}
+                  onChange={handleProfileChange}
                 />
                 <TextField
                   variant="outlined"
                   margin="normal"
-                  required
                   fullWidth
                   id="phone"
                   label="Phone"
                   name="phone"
                   autoComplete="tel"
-                  value={formData.phone}
-                  onChange={handleChange}
+                  value={profileData.phone}
+                  onChange={handleProfileChange}
                 />
                 <Button
                   type="submit"
@@ -309,7 +326,7 @@ const EditProfile = () => {
           }}
         >
           <h3>All Saved Addresses</h3>
-          {userData.saved_address.map((address, index) => (
+          {userData.saved_address?.map((address, index) => (
             <div
               key={index}
               style={{

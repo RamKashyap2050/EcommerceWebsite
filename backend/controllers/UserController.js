@@ -282,24 +282,19 @@ const removeWishlist = asyncHandler(async (req, res) => {
   }
 });
 const updateUser = asyncHandler(async (req, res) => {
-  const userId = req.params // Assuming the user ID is coming from the 'userId' parameter in the request
+  const { userID } = req.params; 
 
-  if (!userId) {
+  if (!userID) {
     res.status(400);
     throw new Error("User ID not provided");
   }
 
-  // Removing the 'address' field from the update object
   const { address, ...updateData } = req.body;
 
-  const updatedUser = await Users.findByIdAndUpdate(
-    userId,
-    updateData,
-    {
-      new: true,
-    }
-  );
-
+  const updatedUser = await Users.findByIdAndUpdate(userID, updateData, {
+    new: true,
+  });
+  console.log(updateUser);
   if (!updatedUser) {
     res.status(404);
     throw new Error("User not found");
@@ -310,7 +305,6 @@ const updateUser = asyncHandler(async (req, res) => {
     token: await generateToken(updatedUser._id),
   });
 });
-
 
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -327,5 +321,5 @@ module.exports = {
   getWishlist,
   removeWishlist,
   removeClientAddress,
-  updateUser
+  updateUser,
 };
