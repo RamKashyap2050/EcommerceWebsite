@@ -68,6 +68,9 @@ const CategoryDisplay = () => {
       <Slider {...settings} className="zigzag-carousel">
         {renderZigZagCarousel()}
       </Slider>
+      <span>
+        
+      </span>
     </div>
   );
 };
