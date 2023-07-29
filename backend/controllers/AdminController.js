@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Category = require("../models/CategoryModel");
 const Product = require("../models/ProductModel");
-const sharp = require("sharp")
+const sharp = require("sharp");
+const CategoryModel = require("../models/CategoryModel");
 //Function which enables User to Login
 const loginAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -32,10 +33,12 @@ const loginAdmin = asyncHandler(async (req, res) => {
 
 const createCategory = asyncHandler(async (req, res) => {
   const { category_name, category_description } = req.body;
-
+  const image = req.files.image;
+  console.log(category_description, category_name, image)
   const newCategory = await Category.create({
     category_name,
     category_description,
+    image
   });
   res.status(201).json(newCategory);
 });
@@ -136,6 +139,8 @@ const getUsersforAdmin  = asyncHandler(async(req,res) => {
 
     res.status(200).json(getUsersforAdmin)
 })
+
+
 
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {

@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const Wishlist = require("../models/WishlistModel");
 const sharp = require("sharp");
-
+const Category = require("../models/CategoryModel")
 //Function that enables us to Signup
 const registerUser = asyncHandler(async (req, res) => {
   const { user_name, phone, email, password } = req.body;
@@ -306,6 +306,12 @@ const updateUser = asyncHandler(async (req, res) => {
   });
 });
 
+const getCategories = asyncHandler(async(req,res) => {
+  const getCategories = await Category.find()
+
+  res.status(200).json(getCategories)
+})
+
 const generateToken = async (id) => {
   return await jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
@@ -322,4 +328,5 @@ module.exports = {
   removeWishlist,
   removeClientAddress,
   updateUser,
+  getCategories
 };
