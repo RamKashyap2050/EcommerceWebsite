@@ -23,8 +23,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Alert } from "react-bootstrap";
 import Spinner from "../components/Spinner";
 import OverlayedImage from "../components/HomeImage";
-import CategoryDisplay from "./CategoryDisplay";
-import { Spin } from "antd";
 const UserHomePage = () => {
   const [data, setData] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -131,138 +129,133 @@ const UserHomePage = () => {
         <OverlayedImage />
         <div className="p-3">
           {show && <Alert>{show}</Alert>}
-          {isLoading ? <Spinner /> : <CategoryDisplay />}
           {isLoading ? (
             <Spinner />
           ) : (
-            <>
-            <h4 style={{textAlign:"center"}}>Products</h4>
-            <span className="underline"></span>
-              <Grid container spacing={4}>
-                {data.map((product, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={product.id}>
-                    <Card className="p-4">
-                      <div className="carousel-container" key={product.id}>
-                        <div
-                          id={`carousel-${product.id}-${index}`}
-                          className="carousel slide"
-                          data-ride="carousel"
-                        >
-                          <div className="carousel-inner">
-                            {product.images.map((image, imageIndex) => (
-                              <div
-                                className={`carousel-item ${
-                                  imageIndex === 0 ? "active" : ""
-                                }`}
-                                key={imageIndex}
-                              >
-                                <img
-                                  src={convertImageBufferToBase64(image)}
-                                  alt={`Product Image ${imageIndex + 1}`}
-                                  className="product-image"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                          <a
-                            className="carousel-control-prev"
-                            href={`#carousel-${product.id}-${index}`}
-                            role="button"
-                            data-slide="prev"
-                          >
-                            <span
-                              className="carousel-control-prev-icon"
-                              aria-hidden="true"
-                            ></span>
-                            <span className="sr-only">Previous</span>
-                          </a>
-                          <a
-                            className="carousel-control-next"
-                            href={`#carousel-${product.id}-${index}`}
-                            role="button"
-                            data-slide="next"
-                          >
-                            <span
-                              className="carousel-control-next-icon"
-                              aria-hidden="true"
-                            ></span>
-                            <span className="sr-only">Next</span>
-                          </a>
+            <Grid container spacing={4}>
+              {data.map((product, index) => (
+                <Grid item xs={12} sm={6} md={4} key={product.id}>
+                  <Card className="p-4">
+                    <div className="carousel-container" key={product.id}>
+                      <div
+                        id={`carousel-${product.id}-${index}`}
+                        className="carousel slide"
+                        data-ride="carousel"
+                      >
+                        <div className="carousel-inner">
+                          {product.images.map((image, imageIndex) => (
+                            <div
+                              className={`carousel-item ${
+                                imageIndex === 0 ? "active" : ""
+                              }`}
+                              key={imageIndex}
+                            >
+                              <img
+                                src={convertImageBufferToBase64(image)}
+                                alt={`Product Image ${imageIndex + 1}`}
+                                className="product-image"
+                              />
+                            </div>
+                          ))}
                         </div>
+                        <a
+                          className="carousel-control-prev"
+                          href={`#carousel-${product.id}-${index}`}
+                          role="button"
+                          data-slide="prev"
+                        >
+                          <span
+                            className="carousel-control-prev-icon"
+                            aria-hidden="true"
+                          ></span>
+                          <span className="sr-only">Previous</span>
+                        </a>
+                        <a
+                          className="carousel-control-next"
+                          href={`#carousel-${product.id}-${index}`}
+                          role="button"
+                          data-slide="next"
+                        >
+                          <span
+                            className="carousel-control-next-icon"
+                            aria-hidden="true"
+                          ></span>
+                          <span className="sr-only">Next</span>
+                        </a>
                       </div>
-                      <CardContent>
-                        <Typography variant="h5" component="h2">
-                          {product.product_name}
-                        </Typography>
-                        <Typography color="textSecondary">
-                          {product.product_description}
-                        </Typography>
+                    </div>
+                    <CardContent>
+                      <Typography variant="h5" component="h2">
+                        {product.product_name}
+                      </Typography>
+                      <Typography color="textSecondary">
+                        {product.product_description}
+                      </Typography>
 
-                        <Typography
-                          variant="h6"
-                          component="h6"
-                          style={{ fontWeight: "bolder" }}
-                        >
-                          {product.product_price}$
-                        </Typography>
-                      </CardContent>
+                      <Typography
+                        variant="h6"
+                        component="h6"
+                        style={{ fontWeight: "bolder" }}
+                      >
+                        {product.product_price}$
+                      </Typography>
+                    </CardContent>
 
-                      <CardActions style={{ display: "flex" }}>
-                        {product.stock_number <= 0 ? (
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            style={{ width: "50%" }}
-                            disabled
-                          >
-                            Out of Stock
-                          </Button>
-                        ) : (
-                          <>
-                            {product.addedToCart ? (
-                              <Button
-                                startIcon={<DoneOutline />}
-                                style={{ width: "60%" }}
-                                variant="contained"
-                                color="success"
-                              >
-                                Added
-                              </Button>
-                            ) : (
-                              <Button
-                                startIcon={<ShoppingCart />}
-                                variant="contained"
-                                color="primary"
-                                style={{ width: "60%" }}
-                                onClick={() => AddToCart(product._id)}
-                              >
-                                Add to Cart
-                              </Button>
-                            )}
-                          </>
-                        )}
+                    <CardActions style={{ display: "flex" }}>
+                      {product.stock_number <= 0 ? (
                         <Button
-                          startIcon={
-                            product.addedToWishlist ? (
-                              <FavoriteIcon style={{ color: "red" }} />
-                            ) : (
-                              <FavoriteBorderIcon />
-                            )
-                          }
-                          variant="outlined"
-                          color=""
-                          style={{ width: "40%" }}
-                          onClick={() => handleClick(product._id)}
-                          disabled={product.addedToWishlist}
+                          variant="contained"
+                          color="secondary"
+                          style={{ width: "50%" }}
+                          disabled
                         >
-                          <>{product.addedToWishlist ? "Added" : "Wishlist"}</>
+                          Out of Stock
                         </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </>
+                      ) : (
+                        <>
+                          {product.addedToCart ? (
+                            <Button
+                              startIcon={<DoneOutline />}
+                              style={{ width: "60%" }}
+                              variant="contained"
+                              color="success"
+                            >
+                              Added
+                            </Button>
+                          ) : (
+                            <Button
+                              startIcon={<ShoppingCart />}
+                              variant="contained"
+                              color="primary"
+                              style={{ width: "60%" }}
+                              onClick={() => AddToCart(product._id)}
+                            >
+                              Add to Cart
+                            </Button>
+                          )}
+                        </>
+                      )}
+                      <Button
+                        startIcon={
+                          product.addedToWishlist ? (
+                            <FavoriteIcon style={{ color: "red" }} />
+                          ) : (
+                            <FavoriteBorderIcon />
+                          )
+                        }
+                        variant="outlined"
+                        color=""
+                        style={{ width: "40%" }}
+                        onClick={() => handleClick(product._id)}
+                        disabled={product.addedToWishlist}
+                      >
+                        <>{product.addedToWishlist ? "Added" : "Wishlist"}</>
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           )}
         </div>
         <Footer />

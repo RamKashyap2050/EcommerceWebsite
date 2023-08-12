@@ -77,9 +77,6 @@ const AdminNavbar = () => {
               <a className="dropdown-item" href="/promotionemail">
                 <FaMailBulk className="mr-1" /> Promotion Email
               </a>
-              <a className="dropdown-item" href="/admincategories">
-              <FaUsers className="mr-1" /> Manage Categories
-              </a>
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" onClick={handleLogout}>
                 <FaSignOutAlt className="mr-1" /> Logout

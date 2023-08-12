@@ -8,5 +8,4 @@ router.route("/getcategory").get(getCategory);
 router.route("/getProducts").get(getProducts);
 router.route("/newproduct").post(createProduct)
 router.route("/getusers").get(getUsersforAdmin)
-router.route("/getcategories").get(getCategory)
 module.exports = router;

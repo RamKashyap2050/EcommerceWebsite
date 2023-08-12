@@ -16,7 +16,6 @@ import Cart from "./pages/Cart";
 import PromotionEmail from "./pages/PromotionEmail";
 import Checkout from "./pages/Checkout";
 import EditProfile from "./pages/EditProfile";
-import ManageCategories from "./pages/ManageCategories";
 function App() {
   return (
     <BrowserRouter>
@@ -37,7 +36,6 @@ function App() {
         <Route path='/promotionemail' element={<PromotionEmail />} />
         <Route path='/usercheckout' element={<Checkout />} />
         <Route path='/editprofile' element={<EditProfile />} />
-        <Route path='/admincategories' element={<ManageCategories />} />
       </Routes> 
     </BrowserRouter>
   );
