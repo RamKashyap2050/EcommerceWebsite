@@ -32,7 +32,7 @@ const LoginAdmin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3030/Admin/login", {
+      const response = await axios.post("/Admin/login", {
         email,
         password,
       });

@@ -46,7 +46,7 @@ const AddCategory = () => {
     };
 
     axios
-      .post("http://localhost:3030/Admin/newcategory", categoryData)
+      .post("/Admin/newcategory", categoryData)
       .then((response) => {
         console.log("Category submission successful!");
         console.log("Response:", response.data);

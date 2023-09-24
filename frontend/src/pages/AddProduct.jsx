@@ -88,7 +88,7 @@ const AddProduct = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3030/Admin/getcategory")
+      .get("/Admin/getcategory")
       .then((response) => {
         setCategories(response.data);
         console.log(response.data);

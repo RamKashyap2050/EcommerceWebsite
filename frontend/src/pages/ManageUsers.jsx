@@ -30,7 +30,7 @@ const ManageUsers = () => {
 
   // This will fetch all users for Admin for Blocking and Unblocking Purposes
   useEffect(() => {
-    Axios.get("http://localhost:3030/Admin/getusers").then((response) => {
+    Axios.get("/Admin/getusers").then((response) => {
       setResults(response.data);
       console.log(response.data);
     });
